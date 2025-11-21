@@ -1,0 +1,33 @@
+1. Ketika user mengambil foto, bagian kode mana yang menyimpan file tersebut ke MediaStore?
+
+Bagian kode yang simpan file ke MediaStore ada di fungsi insertToStore().
+Di situ aplikasinya memasukan dulu data ke MediaStore pake contentResolver.insert(), terus file yang ada di URI FileProvider dicopy ke lokasi baru lewat inputStream dan outputStream.
+Jadi file yang awalnya ada di folder sementara, dipindah ke MediaStore agar bisa muncul di Gallery.
+
+
+
+
+
+2. Pada file FileInfo.kt terdapat 5 atribut:
+Apa yang dimaksud dengan atribut pertama uri?
+Apa yang dimaksud dengan atribut keempat relativePath?
+
+uri adalah alamat file sementara yang dibuat oleh FileProvider. Kameranya nanti nulis hasil fotonya ke URI ini dulu sebelum filenya dipindah ke MediaStore.
+relativePath itu lokasi folder tujuan di MediaStore. Misalnya Pictures atau Movies. MediaStore pakai pathnya buat nentuin filenya nanti harus disimpan di folder mana.
+
+
+
+
+
+3. Bonus: Jelaskan alur proses ketika user mengambil gambar hingga file muncul di MediaStore.
+
+Alurnya:
+1. User pencet tombol foto di aplikasinya.
+2. Aplikasi cek permission dulu.
+3. Kalau permissionnya diizinkan, app buat FileInfo yang isinya file kosong, nama file, dan URI dari FileProvider.
+4. App panggil takePictureLauncher.launch(uri) buat buka kamera.
+5. Kamera tulis foto ke URI tadi.
+6. Setelah selesai, callback dari TakePicture() dipanggil dan app manggil insertImageToStore().
+7. Di insertToStore(), file dari FileProvider dicopy ke MediaStore lewat inputStream dan outputStream.
+8. MediaStore simpen file ke folder tujuan sesuai relativePath.
+9. File muncul di Gallery dan bisa diakses.
